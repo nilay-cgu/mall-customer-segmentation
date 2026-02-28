@@ -126,31 +126,39 @@ except:
 # ---------------- HOME ----------------
 if menu == "Home":
 
+    st.markdown("## Project Overview")
+
+    if df is not None:
+        col1, col2, col3 = st.columns(3)
+        col1.markdown(f"<div class='metric-box'>Total Customers<br><b>{df.shape[0]}</b></div>", unsafe_allow_html=True)
+        col2.markdown(f"<div class='metric-box'>Total Features<br><b>{df.shape[1]}</b></div>", unsafe_allow_html=True)
+        col3.markdown("<div class='metric-box'>Algorithm Used<br><b>K-Means Clustering</b></div>", unsafe_allow_html=True)
+
     st.markdown("## Introduction")
     st.markdown("""
     <div class="card">
-    Customer segmentation is a data-driven technique used to divide customers into groups 
-    based on similar characteristics. In this project, we applied the K-Means clustering 
-    algorithm to segment mall customers using Annual Income and Spending Score.
-    The objective is to identify patterns that help businesses make better marketing decisions.
+    Customer segmentation is a data analytics technique used to group customers 
+    based on similar behavioral and financial characteristics. 
+    In this project, we apply the K-Means clustering algorithm to classify mall customers 
+    using Annual Income and Spending Score.
     </div>
     """, unsafe_allow_html=True)
 
     st.markdown("## Dataset Description")
     st.markdown("""
     <div class="card">
-    The dataset contains Customer ID, Gender, Age, Annual Income (k$), 
+    The dataset includes Customer ID, Gender, Age, Annual Income (k$), 
     and Spending Score (1–100). Income and Spending Score were selected 
-    for clustering because they directly influence purchasing behavior.
+    for clustering because they directly reflect purchasing behavior.
     </div>
     """, unsafe_allow_html=True)
 
     st.markdown("## How K-Means Works")
     st.markdown("""
     <div class="card">
-    K-Means is an unsupervised learning algorithm that divides data into K clusters.
-    It assigns each data point to the nearest centroid and updates centroids iteratively 
-    until cluster positions stabilize. The Elbow Method is used to determine the optimal K value.
+    K-Means is an unsupervised learning algorithm that partitions data into K clusters.
+    Each data point is assigned to the nearest centroid and centroids are updated 
+    iteratively until convergence is achieved.
     </div>
     """, unsafe_allow_html=True)
 
@@ -158,10 +166,19 @@ if menu == "Home":
     st.markdown("""
     <div class="card">
     • Data preprocessing and feature selection  
-    • Applying Elbow Method to find optimal clusters  
-    • Implementing K-Means algorithm  
-    • Evaluating results using Silhouette Score  
-    • Visualizing clusters using scatter plots  
+    • Determining optimal cluster count using Elbow Method  
+    • Applying K-Means algorithm  
+    • Evaluating clustering using Silhouette Score  
+    • Visualizing results through scatter plots  
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("## Advantages")
+    st.markdown("""
+    <div class="card">
+    • Simple and computationally efficient  
+    • Works well with structured numerical data  
+    • Easy to interpret cluster results  
     </div>
     """, unsafe_allow_html=True)
 
@@ -169,8 +186,49 @@ if menu == "Home":
     st.markdown("""
     <div class="card">
     • Targeted marketing campaigns  
-    • Identifying premium customers  
-    • Customer loyalty strategies  
-    • Data-driven business decision making  
+    • Identifying high-value customers  
+    • Customer retention strategies  
+    • Business decision support  
+    </div>
+    """, unsafe_allow_html=True)
+
+# ---------------- ANALYSIS ----------------
+elif menu == "Analysis" and df is not None:
+
+    st.dataframe(df.head())
+
+    features = st.multiselect(
+        "Select Features",
+        df.columns,
+        default=["Annual Income (k$)", "Spending Score (1-100)"]
+    )
+
+    if len(features) >= 2:
+        X = df[features]
+
+        k = st.slider("Clusters", 2, 10, 5)
+        kmeans = KMeans(n_clusters=k, random_state=42)
+        labels = kmeans.fit_predict(X)
+
+        fig, ax = plt.subplots()
+        ax.scatter(X.iloc[:, 0], X.iloc[:, 1], c=labels)
+        ax.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1], marker="X", s=250)
+        st.pyplot(fig)
+
+# ---------------- INSIGHTS ----------------
+elif menu == "Insights":
+    st.markdown("""
+    <div class="card">
+    The clustering model helps identify different types of customers.
+    Businesses can use this segmentation to design focused marketing strategies.
+    </div>
+    """, unsafe_allow_html=True)
+
+# ---------------- ABOUT ----------------
+elif menu == "About":
+    st.markdown("""
+    <div class="card">
+    Mall Customer Segmentation using K-Means  
+    C V Raman Global University  
     </div>
     """, unsafe_allow_html=True)
