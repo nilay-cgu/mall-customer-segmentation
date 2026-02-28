@@ -4,37 +4,40 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 
-# Page config
+# ---------------- Page Config ----------------
 st.set_page_config(page_title="Mall Customer Segmentation", layout="wide")
 
-# -------- Dark Theme Styling --------
+# ---------------- Custom Dark Styling ----------------
 st.markdown("""
 <style>
-body {
-    background-color: #0E1117;
+.stApp {
+    background-color: #0f172a;
     color: white;
 }
-.stApp {
-    background-color: #0E1117;
+section[data-testid="stSidebar"] {
+    background-color: #111827;
 }
-h1, h2, h3, h4 {
-    color: #4DA6FF;
+h1, h2, h3 {
+    color: #38bdf8;
+}
+.stButton>button {
+    background-color: #2563eb;
+    color: white;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# -------- Header --------
-st.title("Mall Customer Segmentation")
-st.write("Major Project - C V Raman Global University")
-
+# ---------------- Header Section ----------------
+st.markdown("<h1 style='text-align:center;'>Mall Customer Segmentation Dashboard</h1>", unsafe_allow_html=True)
+st.markdown("<h4 style='text-align:center;'>Major Project - C V Raman Global University</h4>", unsafe_allow_html=True)
 st.markdown("---")
 
-# -------- Sidebar --------
-st.sidebar.title("Navigation")
+# ---------------- Sidebar ----------------
+st.sidebar.title("Project Navigation")
 
 menu = st.sidebar.radio(
-    "Go to",
-    ["Home", "Customer Analysis", "About"]
+    "Select Section",
+    ["Home", "Data Analysis", "About"]
 )
 
 st.sidebar.markdown("---")
@@ -45,26 +48,42 @@ st.sidebar.write("Aditya Kumar")
 st.sidebar.write("Archita Rout")
 st.sidebar.write("Bhavya Rani")
 
-# -------- Home --------
+# ---------------- Home ----------------
 if menu == "Home":
-    st.subheader("Project Overview")
-    st.write(
-        "This application performs customer segmentation using "
-        "K-Means clustering on the Mall Customers dataset. "
-        "It helps identify customer groups based on income and spending patterns."
-    )
+    col1, col2 = st.columns(2)
 
-# -------- Analysis --------
-elif menu == "Customer Analysis":
-    st.subheader("Upload Dataset")
-    file = st.file_uploader("Upload Mall_Customers.csv", type=["csv"])
+    with col1:
+        st.subheader("Project Overview")
+        st.write("""
+        This dashboard performs customer segmentation using
+        K-Means clustering on the Mall Customers dataset.
+        The objective is to identify distinct customer groups
+        based on income and spending patterns.
+        """)
+
+    with col2:
+        st.subheader("Key Features")
+        st.write("""
+        • Interactive dataset upload  
+        • Elbow method visualization  
+        • Dynamic cluster selection  
+        • Silhouette score evaluation  
+        • Cluster statistics summary  
+        """)
+
+# ---------------- Data Analysis ----------------
+elif menu == "Data Analysis":
+
+    st.subheader("Upload Mall_Customers.csv")
+    file = st.file_uploader("Upload Dataset", type=["csv"])
 
     if file is not None:
         df = pd.read_csv(file)
 
-        st.subheader("Dataset Preview")
+        st.markdown("### Dataset Preview")
         st.dataframe(df.head())
 
+        st.markdown("### Feature Selection")
         features = st.multiselect(
             "Select Features for Clustering",
             df.columns,
@@ -74,32 +93,40 @@ elif menu == "Customer Analysis":
         if len(features) >= 2:
             X = df[features]
 
-            # Elbow Method
-            st.subheader("Elbow Method")
+            col1, col2 = st.columns(2)
 
-            wcss = []
-            for i in range(1, 11):
-                kmeans = KMeans(n_clusters=i, random_state=42)
-                kmeans.fit(X)
-                wcss.append(kmeans.inertia_)
+            # -------- Elbow Method --------
+            with col1:
+                st.markdown("### Elbow Method")
 
-            fig1, ax1 = plt.subplots()
-            ax1.plot(range(1, 11), wcss)
-            ax1.set_xlabel("Number of Clusters")
-            ax1.set_ylabel("WCSS")
-            ax1.set_title("Elbow Graph")
-            st.pyplot(fig1)
+                wcss = []
+                for i in range(1, 11):
+                    kmeans = KMeans(n_clusters=i, random_state=42)
+                    kmeans.fit(X)
+                    wcss.append(kmeans.inertia_)
 
-            # Cluster Selection
-            k = st.slider("Select Number of Clusters", 2, 10, 5)
+                fig1, ax1 = plt.subplots()
+                ax1.plot(range(1, 11), wcss)
+                ax1.set_xlabel("Clusters")
+                ax1.set_ylabel("WCSS")
+                ax1.set_title("Elbow Graph")
+                st.pyplot(fig1)
 
-            kmeans = KMeans(n_clusters=k, random_state=42)
-            labels = kmeans.fit_predict(X)
+            # -------- Cluster Selection --------
+            with col2:
+                st.markdown("### Cluster Configuration")
+                k = st.slider("Select Number of Clusters", 2, 10, 5)
 
-            df["Cluster"] = labels
+                kmeans = KMeans(n_clusters=k, random_state=42)
+                labels = kmeans.fit_predict(X)
 
-            # Cluster Plot
-            st.subheader("Cluster Visualization")
+                df["Cluster"] = labels
+
+                score = silhouette_score(X, labels)
+                st.metric("Silhouette Score", round(score, 2))
+
+            # -------- Cluster Visualization --------
+            st.markdown("### Cluster Visualization")
 
             fig2, ax2 = plt.subplots()
             ax2.scatter(X.iloc[:, 0], X.iloc[:, 1], c=labels)
@@ -114,22 +141,20 @@ elif menu == "Customer Analysis":
             ax2.set_title("Customer Segments")
             st.pyplot(fig2)
 
-            # Silhouette Score
-            score = silhouette_score(X, labels)
-            st.write("Silhouette Score:", round(score, 2))
-
-            # Cluster Stats
-            st.subheader("Cluster Statistics")
+            # -------- Statistics --------
+            st.markdown("### Cluster Statistics")
             st.dataframe(df.groupby("Cluster").mean())
 
         else:
             st.warning("Please select at least two features.")
 
-# -------- About --------
+# ---------------- About ----------------
 elif menu == "About":
     st.subheader("About the Project")
-    st.write(
-        "This project applies K-Means clustering to segment customers "
-        "based on income and spending behavior. "
-        "It is developed as a major project for C V Raman Global University."
-    )
+    st.write("""
+    Project Title: Mall Customer Segmentation using K-Means  
+    Institution: C V Raman Global University  
+
+    This project applies unsupervised learning to identify 
+    distinct customer segments for better marketing strategy planning.
+    """)
