@@ -68,62 +68,103 @@ try:
 except:
     df = None
 
-# ---------------- Home ----------------
+# ---------------- Home Section ----------------
 if menu == "Home":
+
+    st.markdown("## Project Overview")
+
+    col1, col2, col3 = st.columns(3)
+
+    if df is not None:
+        col1.markdown(f"<div class='metric-box'>Total Customers<br><b>{df.shape[0]}</b></div>", unsafe_allow_html=True)
+        col2.markdown(f"<div class='metric-box'>Total Features<br><b>{df.shape[1]}</b></div>", unsafe_allow_html=True)
+        col3.markdown("<div class='metric-box'>Algorithm Used<br><b>K-Means Clustering</b></div>", unsafe_allow_html=True)
 
     st.markdown("## Introduction")
     st.markdown("""
     <div class="card">
-    Customer segmentation is a marketing strategy used to divide customers 
-    into groups based on purchasing behavior and financial characteristics. 
-    In this project, the K-Means clustering algorithm is applied 
-    to segment mall customers using Annual Income and Spending Score. 
-    This approach helps in identifying meaningful customer categories 
-    for strategic business planning.
+    Customer segmentation is a data analytics technique used to group customers 
+    based on similar behavioral and financial characteristics. 
+    This project applies K-Means clustering to classify mall customers 
+    using Annual Income and Spending Score as primary attributes.
+    The objective is to identify patterns that support strategic marketing decisions.
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("## Problem Statement")
+    st.markdown("## Dataset Description")
     st.markdown("""
     <div class="card">
-    Retail businesses often struggle to identify different customer groups 
-    for targeted marketing. Without segmentation, promotions may not reach 
-    the appropriate audience effectively. 
-    The objective of this project is to use unsupervised learning 
-    to uncover hidden patterns in customer data.
+    The dataset consists of mall customer information including Customer ID, 
+    Gender, Age, Annual Income (k$), and Spending Score (1–100).
+    For clustering, income and spending score were selected 
+    because they directly influence purchasing behavior.
+    The dataset provides a practical example of real-world retail analytics.
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("## Methodology")
+    st.markdown("## How K-Means Works")
     st.markdown("""
     <div class="card">
-    The project involves data preprocessing, feature selection, 
-    and determining the optimal number of clusters using the Elbow Method. 
-    K-Means clustering is then applied to group customers. 
-    The results are evaluated using the Silhouette Score 
-    to measure clustering quality and separation.
+    K-Means is an unsupervised machine learning algorithm 
+    that partitions data into K distinct clusters.
+    It assigns data points to clusters by minimizing the 
+    Within Cluster Sum of Squares (WCSS).
+    The algorithm iteratively updates cluster centroids 
+    until convergence is achieved.
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("## Results")
+    st.markdown("## Implementation Steps")
+
+    colA, colB = st.columns(2)
+
+    with colA:
+        st.markdown("""
+        <div class="card">
+        • Data preprocessing  
+        • Feature selection  
+        • Elbow method analysis  
+        • Optimal cluster determination  
+        </div>
+        """, unsafe_allow_html=True)
+
+    with colB:
+        st.markdown("""
+        <div class="card">
+        • Model training using K-Means  
+        • Cluster visualization  
+        • Silhouette score evaluation  
+        • Interpretation of results  
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("## Advantages")
     st.markdown("""
     <div class="card">
-    The algorithm successfully classified customers into distinct groups 
-    based on income and spending behavior. 
-    Premium customers with high spending patterns were clearly identified, 
-    while moderate and conservative spenders formed separate clusters. 
-    The Silhouette Score confirmed satisfactory clustering performance.
+    • Simple and computationally efficient  
+    • Works well with large datasets  
+    • Easy to interpret results  
+    • Effective for spherical cluster structures  
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("## Future Scope")
+    st.markdown("## Limitations")
     st.markdown("""
     <div class="card">
-    Future improvements may include incorporating additional features 
-    such as Age and Gender to improve segmentation accuracy. 
-    Advanced clustering algorithms like DBSCAN or Hierarchical Clustering 
-    can also be explored. 
-    The system can further be deployed as a real-time analytics dashboard.
+    • Requires predefined number of clusters  
+    • Sensitive to initial centroid selection  
+    • Not suitable for non-spherical clusters  
+    • Affected by outliers  
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("## Real-World Applications")
+    st.markdown("""
+    <div class="card">
+    • Targeted marketing campaigns  
+    • Customer loyalty segmentation  
+    • Sales strategy optimization  
+    • Business intelligence analytics  
     </div>
     """, unsafe_allow_html=True)
 
@@ -134,14 +175,7 @@ elif menu == "Analysis":
         st.error("Mall_Customers.csv file not found in project folder.")
     else:
 
-        st.markdown("## Dataset Overview")
-
-        col1, col2, col3 = st.columns(3)
-        col1.markdown(f"<div class='metric-box'>Total Records<br><b>{df.shape[0]}</b></div>", unsafe_allow_html=True)
-        col2.markdown(f"<div class='metric-box'>Total Features<br><b>{df.shape[1]}</b></div>", unsafe_allow_html=True)
-        col3.markdown("<div class='metric-box'>Algorithm<br><b>K-Means</b></div>", unsafe_allow_html=True)
-
-        st.markdown("### Dataset Preview")
+        st.markdown("## Dataset Preview")
         st.dataframe(df.head())
 
         features = st.multiselect(
@@ -172,7 +206,7 @@ elif menu == "Analysis":
                 st.pyplot(fig1)
 
             with col2:
-                st.markdown("### Cluster Configuration")
+                st.markdown("### Cluster Selection")
 
                 k = st.slider("Select Number of Clusters", 2, 10, 5)
 
@@ -199,29 +233,27 @@ elif menu == "Analysis":
 # ---------------- Insights ----------------
 elif menu == "Insights":
 
-    st.markdown("## Business Insights")
     st.markdown("""
     <div class="card">
-    The clustering model provides meaningful insights into customer behavior. 
-    High-income and high-spending customers can be targeted with premium offers 
-    and loyalty programs. Moderate spenders may respond to seasonal promotions, 
-    while conservative buyers may prefer value-based discounts. 
-    These insights support strategic marketing and improved customer engagement.
+    The clustering model provides actionable insights into customer purchasing behavior. 
+    High-income high-spending customers can be targeted with premium offers, 
+    while moderate spenders may respond to promotional campaigns. 
+    These insights enable businesses to allocate marketing resources efficiently 
+    and improve overall profitability.
     </div>
     """, unsafe_allow_html=True)
 
 # ---------------- About ----------------
 elif menu == "About":
 
-    st.markdown("## About the Project")
     st.markdown("""
     <div class="card">
     Project Title: Mall Customer Segmentation using K-Means  
     Institution: C V Raman Global University  
     
-    This project demonstrates the practical implementation of 
-    unsupervised machine learning techniques in retail analytics. 
-    The dashboard integrates clustering, visualization, and evaluation 
-    into a structured interactive web application using Streamlit.
+    This project demonstrates practical implementation of 
+    unsupervised learning techniques in retail analytics. 
+    It integrates data preprocessing, clustering, evaluation, 
+    and visualization into an interactive dashboard system.
     </div>
     """, unsafe_allow_html=True)
