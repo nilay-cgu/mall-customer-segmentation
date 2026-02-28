@@ -4,14 +4,14 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 
-# ---------------- Page Configuration ----------------
+# ---------------- Page Config ----------------
 st.set_page_config(page_title="Mall Customer Segmentation", layout="wide")
 
-# ---------------- Styling ----------------
+# ---------------- Premium Styling ----------------
 st.markdown("""
 <style>
 .stApp {
-    background-color: #0b1120;
+    background: linear-gradient(135deg, #0f172a, #0b1120);
     color: #f1f5f9;
 }
 section[data-testid="stSidebar"] {
@@ -25,17 +25,78 @@ h2, h3 {
     color: #93c5fd;
 }
 .card {
-    background-color: #1e293b;
+    background: rgba(30,41,59,0.6);
+    backdrop-filter: blur(10px);
     padding: 20px;
     border-radius: 12px;
     margin-bottom: 15px;
+    border: 1px solid rgba(255,255,255,0.1);
 }
 .metric-box {
-    background-color: #1e40af;
+    background: linear-gradient(90deg,#1e40af,#2563eb);
     padding: 15px;
     border-radius: 10px;
     text-align: center;
     font-size: 18px;
+}
+
+/* TEAM MODAL STYLING */
+.team-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.team-modal {
+    position: relative;
+    background: rgba(17,24,39,0.9);
+    padding: 35px;
+    border-radius: 18px;
+    width: 420px;
+    text-align: center;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    box-shadow: 0 0 30px #3b82f6;
+    animation: zoomIn 0.3s ease-in-out;
+}
+
+.team-modal h3 {
+    margin-bottom: 10px;
+    color: #60a5fa;
+    font-size: 22px;
+}
+
+.team-modal p {
+    font-size: 16px;
+    color: #e5e7eb;
+}
+
+.team-close {
+    position: absolute;
+    top: 12px;
+    right: 18px;
+    font-size: 22px;
+    cursor: pointer;
+    color: white;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@keyframes zoomIn {
+    from {transform: scale(0.8);}
+    to {transform: scale(1);}
 }
 </style>
 """, unsafe_allow_html=True)
@@ -44,6 +105,10 @@ h2, h3 {
 st.markdown("<h1>Mall Customer Segmentation System</h1>", unsafe_allow_html=True)
 st.markdown("<h4 style='text-align:center;'>Major Project - C V Raman Global University</h4>", unsafe_allow_html=True)
 st.markdown("---")
+
+# ---------------- Session State ----------------
+if "selected_member" not in st.session_state:
+    st.session_state.selected_member = None
 
 # ---------------- Sidebar ----------------
 st.sidebar.title("Navigation")
@@ -55,12 +120,44 @@ menu = st.sidebar.radio(
 
 st.sidebar.markdown("---")
 st.sidebar.subheader("Project Team")
-st.sidebar.write("Nilay Anand")
-st.sidebar.write("Mohit Paul")
-st.sidebar.write("Ayush Raj")
-st.sidebar.write("Aditya Kumar")
-st.sidebar.write("Archita Rout")
-st.sidebar.write("Bhavya Rani")
+
+members = {
+    "Nilay Anand": "Worked on UI design and model integration.",
+    "Mohit Paul": "Handled dataset preprocessing and feature selection.",
+    "Ayush Raj": "Implemented K-Means and applied Elbow Method.",
+    "Aditya Kumar": "Created visualizations and analyzed clustering results.",
+    "Archita Rout": "Prepared documentation and explained methodology.",
+    "Bhavya Rani": "Worked on business insights and presentation."
+}
+
+for name in members:
+    if st.sidebar.button(name):
+        st.session_state.selected_member = name
+
+# ---------------- Premium Animated Popup ----------------
+if st.session_state.selected_member is not None:
+
+    name = st.session_state.selected_member
+    role = members[name]
+
+    st.markdown(f"""
+    <div class="team-overlay" onclick="window.parent.postMessage({{type:'close'}}, '*')">
+        <div class="team-modal" onclick="event.stopPropagation();">
+            <span class="team-close" onclick="window.parent.postMessage({{type:'close'}}, '*')">✖</span>
+            <h3>{name}</h3>
+            <p>{role}</p>
+        </div>
+    </div>
+
+    <script>
+    window.addEventListener("message", (event) => {{
+        if (event.data.type === "close") {{
+            const overlay = document.querySelector(".team-overlay");
+            if (overlay) overlay.remove();
+        }}
+    }});
+    </script>
+    """, unsafe_allow_html=True)
 
 # ---------------- Load Dataset ----------------
 try:
@@ -68,192 +165,20 @@ try:
 except:
     df = None
 
-# ---------------- Home Section ----------------
+# ---------------- Home ----------------
 if menu == "Home":
 
     st.markdown("## Project Overview")
 
-    col1, col2, col3 = st.columns(3)
-
     if df is not None:
+        col1, col2, col3 = st.columns(3)
         col1.markdown(f"<div class='metric-box'>Total Customers<br><b>{df.shape[0]}</b></div>", unsafe_allow_html=True)
         col2.markdown(f"<div class='metric-box'>Total Features<br><b>{df.shape[1]}</b></div>", unsafe_allow_html=True)
         col3.markdown("<div class='metric-box'>Algorithm Used<br><b>K-Means Clustering</b></div>", unsafe_allow_html=True)
 
-    st.markdown("## Introduction")
     st.markdown("""
     <div class="card">
-    Customer segmentation is a data analytics technique used to group customers 
-    based on similar behavioral and financial characteristics. 
-    This project applies K-Means clustering to classify mall customers 
-    using Annual Income and Spending Score as primary attributes.
-    The objective is to identify patterns that support strategic marketing decisions.
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("## Dataset Description")
-    st.markdown("""
-    <div class="card">
-    The dataset consists of mall customer information including Customer ID, 
-    Gender, Age, Annual Income (k$), and Spending Score (1–100).
-    For clustering, income and spending score were selected 
-    because they directly influence purchasing behavior.
-    The dataset provides a practical example of real-world retail analytics.
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("## How K-Means Works")
-    st.markdown("""
-    <div class="card">
-    K-Means is an unsupervised machine learning algorithm 
-    that partitions data into K distinct clusters.
-    It assigns data points to clusters by minimizing the 
-    Within Cluster Sum of Squares (WCSS).
-    The algorithm iteratively updates cluster centroids 
-    until convergence is achieved.
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("## Implementation Steps")
-
-    colA, colB = st.columns(2)
-
-    with colA:
-        st.markdown("""
-        <div class="card">
-        • Data preprocessing  
-        • Feature selection  
-        • Elbow method analysis  
-        • Optimal cluster determination  
-        </div>
-        """, unsafe_allow_html=True)
-
-    with colB:
-        st.markdown("""
-        <div class="card">
-        • Model training using K-Means  
-        • Cluster visualization  
-        • Silhouette score evaluation  
-        • Interpretation of results  
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.markdown("## Advantages")
-    st.markdown("""
-    <div class="card">
-    • Simple and computationally efficient  
-    • Works well with large datasets  
-    • Easy to interpret results  
-    • Effective for spherical cluster structures  
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("## Limitations")
-    st.markdown("""
-    <div class="card">
-    • Requires predefined number of clusters  
-    • Sensitive to initial centroid selection  
-    • Not suitable for non-spherical clusters  
-    • Affected by outliers  
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("## Real-World Applications")
-    st.markdown("""
-    <div class="card">
-    • Targeted marketing campaigns  
-    • Customer loyalty segmentation  
-    • Sales strategy optimization  
-    • Business intelligence analytics  
-    </div>
-    """, unsafe_allow_html=True)
-
-# ---------------- Analysis ----------------
-elif menu == "Analysis":
-
-    if df is None:
-        st.error("Mall_Customers.csv file not found in project folder.")
-    else:
-
-        st.markdown("## Dataset Preview")
-        st.dataframe(df.head())
-
-        features = st.multiselect(
-            "Select Features",
-            df.columns,
-            default=["Annual Income (k$)", "Spending Score (1-100)"]
-        )
-
-        if len(features) >= 2:
-
-            X = df[features]
-
-            col1, col2 = st.columns(2)
-
-            with col1:
-                st.markdown("### Elbow Method")
-
-                wcss = []
-                for i in range(1, 11):
-                    kmeans = KMeans(n_clusters=i, random_state=42)
-                    kmeans.fit(X)
-                    wcss.append(kmeans.inertia_)
-
-                fig1, ax1 = plt.subplots()
-                ax1.plot(range(1, 11), wcss)
-                ax1.set_xlabel("Clusters")
-                ax1.set_ylabel("WCSS")
-                st.pyplot(fig1)
-
-            with col2:
-                st.markdown("### Cluster Selection")
-
-                k = st.slider("Select Number of Clusters", 2, 10, 5)
-
-                kmeans = KMeans(n_clusters=k, random_state=42)
-                labels = kmeans.fit_predict(X)
-
-                score = silhouette_score(X, labels)
-                st.markdown(f"<div class='metric-box'>Silhouette Score<br><b>{round(score,2)}</b></div>", unsafe_allow_html=True)
-
-            st.markdown("### Cluster Visualization")
-
-            fig2, ax2 = plt.subplots()
-            ax2.scatter(X.iloc[:, 0], X.iloc[:, 1], c=labels)
-            ax2.scatter(
-                kmeans.cluster_centers_[:, 0],
-                kmeans.cluster_centers_[:, 1],
-                marker="X",
-                s=250
-            )
-            ax2.set_xlabel(features[0])
-            ax2.set_ylabel(features[1])
-            st.pyplot(fig2)
-
-# ---------------- Insights ----------------
-elif menu == "Insights":
-
-    st.markdown("""
-    <div class="card">
-    The clustering model provides actionable insights into customer purchasing behavior. 
-    High-income high-spending customers can be targeted with premium offers, 
-    while moderate spenders may respond to promotional campaigns. 
-    These insights enable businesses to allocate marketing resources efficiently 
-    and improve overall profitability.
-    </div>
-    """, unsafe_allow_html=True)
-
-# ---------------- About ----------------
-elif menu == "About":
-
-    st.markdown("""
-    <div class="card">
-    Project Title: Mall Customer Segmentation using K-Means  
-    Institution: C V Raman Global University  
-    
-    This project demonstrates practical implementation of 
-    unsupervised learning techniques in retail analytics. 
-    It integrates data preprocessing, clustering, evaluation, 
-    and visualization into an interactive dashboard system.
+    This project applies K-Means clustering to segment mall customers based on income and spending behavior.
+    The objective is to identify meaningful groups that support marketing strategy and business decision-making.
     </div>
     """, unsafe_allow_html=True)
