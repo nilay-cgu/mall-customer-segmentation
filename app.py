@@ -7,27 +7,49 @@ from sklearn.metrics import silhouette_score
 # ---------------- Page Config ----------------
 st.set_page_config(page_title="Mall Customer Segmentation", layout="wide")
 
-# ---------------- Custom Light Styling ----------------
+# ---------------- Professional Website Styling ----------------
 st.markdown("""
 <style>
 .stApp {
-    background-color: #f4f6f9;
+    background-color: #0b1120;
+    color: #f1f5f9;
 }
-h1 {
-    color: #1e3a8a;
-}
-h2, h3 {
-    color: #2563eb;
-}
+
 section[data-testid="stSidebar"] {
-    background-color: #e2e8f0;
+    background-color: #111827;
+}
+
+h1 {
+    color: #60a5fa;
+}
+
+h2, h3 {
+    color: #93c5fd;
+}
+
+.card {
+    background-color: #1e293b;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+.metric-box {
+    background-color: #1e40af;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 18px;
 }
 </style>
 """, unsafe_allow_html=True)
 
 # ---------------- Header ----------------
-st.markdown("<h1 style='text-align:center;'>Mall Customer Segmentation System</h1>", unsafe_allow_html=True)
-st.markdown("<h4 style='text-align:center;'>Major Project - C V Raman Global University</h4>", unsafe_allow_html=True)
+st.markdown("""
+<h1 style='text-align:center;'>Mall Customer Segmentation System</h1>
+<h4 style='text-align:center;'>Major Project - C V Raman Global University</h4>
+""", unsafe_allow_html=True)
+
 st.markdown("---")
 
 # ---------------- Sidebar ----------------
@@ -47,7 +69,7 @@ st.sidebar.write("Aditya Kumar")
 st.sidebar.write("Archita Rout")
 st.sidebar.write("Bhavya Rani")
 
-# ---------------- Load Dataset Automatically ----------------
+# ---------------- Load Dataset ----------------
 try:
     df = pd.read_csv("Mall_Customers.csv")
 except:
@@ -58,43 +80,48 @@ if menu == "Home":
 
     st.markdown("## Project Overview")
 
-    st.write("""
-    This project performs customer segmentation using the K-Means 
-    clustering algorithm on the Mall Customers dataset. 
-    The objective is to identify meaningful customer groups 
-    based on annual income and spending behavior.
-    """)
+    st.markdown("""
+    <div class="card">
+    Customer segmentation is used to classify customers into different groups 
+    based on purchasing behavior and income levels. 
+    In this project, we applied the K-Means clustering algorithm 
+    to identify meaningful customer segments.
+    </div>
+    """, unsafe_allow_html=True)
 
-    st.markdown("### Dataset Information")
+    col1, col2, col3 = st.columns(3)
 
     if df is not None:
-        st.write("Total Records:", df.shape[0])
-        st.write("Total Features:", df.shape[1])
-    else:
-        st.warning("Mall_Customers.csv file not found in project folder.")
+        col1.markdown(f"<div class='metric-box'>Total Records<br><b>{df.shape[0]}</b></div>", unsafe_allow_html=True)
+        col2.markdown(f"<div class='metric-box'>Total Features<br><b>{df.shape[1]}</b></div>", unsafe_allow_html=True)
+        col3.markdown("<div class='metric-box'>Algorithm<br><b>K-Means</b></div>", unsafe_allow_html=True)
 
-    st.markdown("### Implementation Steps")
+    st.markdown("## Implementation Summary")
 
-    st.write("""
-    • Data preprocessing  
-    • Feature selection  
-    • Elbow method analysis  
-    • K-Means clustering  
-    • Cluster evaluation using Silhouette Score  
-    """)
+    st.markdown("""
+    <div class="card">
+    • Performed exploratory data analysis  
+    • Determined optimal clusters using Elbow Method  
+    • Applied K-Means clustering  
+    • Evaluated clustering using Silhouette Score  
+    • Visualized customer segments  
+    </div>
+    """, unsafe_allow_html=True)
 
 # ---------------- Analysis ----------------
 elif menu == "Analysis":
 
     if df is None:
-        st.error("Mall_Customers.csv file not found. Please keep the file in the project folder.")
+        st.error("Mall_Customers.csv file not found in project folder.")
     else:
 
-        st.subheader("Dataset Preview")
+        st.markdown("## Dataset Preview")
         st.dataframe(df.head())
 
+        st.markdown("## Feature Selection")
+
         features = st.multiselect(
-            "Select Features for Clustering",
+            "Select Features",
             df.columns,
             default=["Annual Income (k$)", "Spending Score (1-100)"]
         )
@@ -105,7 +132,6 @@ elif menu == "Analysis":
 
             col1, col2 = st.columns(2)
 
-            # Elbow Method
             with col1:
                 st.markdown("### Elbow Method")
 
@@ -117,12 +143,10 @@ elif menu == "Analysis":
 
                 fig1, ax1 = plt.subplots()
                 ax1.plot(range(1, 11), wcss)
-                ax1.set_xlabel("Number of Clusters")
+                ax1.set_xlabel("Clusters")
                 ax1.set_ylabel("WCSS")
-                ax1.set_title("Elbow Graph")
                 st.pyplot(fig1)
 
-            # Cluster Configuration
             with col2:
                 st.markdown("### Cluster Configuration")
 
@@ -134,9 +158,8 @@ elif menu == "Analysis":
                 df["Cluster"] = labels
 
                 score = silhouette_score(X, labels)
-                st.metric("Silhouette Score", round(score, 2))
+                st.markdown(f"<div class='metric-box'>Silhouette Score<br><b>{round(score,2)}</b></div>", unsafe_allow_html=True)
 
-            # Cluster Visualization
             st.markdown("### Cluster Visualization")
 
             fig2, ax2 = plt.subplots()
@@ -149,7 +172,6 @@ elif menu == "Analysis":
             )
             ax2.set_xlabel(features[0])
             ax2.set_ylabel(features[1])
-            ax2.set_title("Customer Segments")
             st.pyplot(fig2)
 
             st.markdown("### Cluster Statistics")
@@ -161,25 +183,27 @@ elif menu == "Analysis":
 # ---------------- Insights ----------------
 elif menu == "Insights":
 
-    st.subheader("Business Insights")
+    st.markdown("## Business Insights")
 
-    st.write("""
-    The clustering results help identify different types of customers 
-    such as high-income high-spending customers and conservative buyers. 
-    These insights assist businesses in targeted marketing 
-    and strategic planning.
-    """)
+    st.markdown("""
+    <div class="card">
+    The clustering results help identify customer categories such as 
+    high-value customers, moderate spenders, and budget customers.
+    These insights support targeted marketing and strategic decision making.
+    </div>
+    """, unsafe_allow_html=True)
 
 # ---------------- About ----------------
 elif menu == "About":
 
-    st.subheader("About the Project")
+    st.markdown("## About the Project")
 
-    st.write("""
+    st.markdown("""
+    <div class="card">
     Project Title: Mall Customer Segmentation using K-Means  
     Institution: C V Raman Global University  
 
-    This project demonstrates practical implementation of 
-    unsupervised machine learning techniques for real-world 
-    customer behavior analysis.
-    """)
+    This system demonstrates practical implementation of 
+    unsupervised machine learning techniques in customer behavior analysis.
+    </div>
+    """, unsafe_allow_html=True)
