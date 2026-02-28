@@ -7,36 +7,35 @@ from sklearn.metrics import silhouette_score
 # ---------------- Page Config ----------------
 st.set_page_config(page_title="Mall Customer Segmentation", layout="wide")
 
-# ---------------- Dark Theme Styling ----------------
+# ---------------- Custom Light Styling ----------------
 st.markdown("""
 <style>
 .stApp {
-    background-color: #0f172a;
-    color: white;
+    background-color: #f4f6f9;
+}
+h1 {
+    color: #1e3a8a;
+}
+h2, h3 {
+    color: #2563eb;
 }
 section[data-testid="stSidebar"] {
-    background-color: #111827;
-}
-h1, h2, h3 {
-    color: #38bdf8;
-}
-.block-container {
-    padding-top: 2rem;
+    background-color: #e2e8f0;
 }
 </style>
 """, unsafe_allow_html=True)
 
 # ---------------- Header ----------------
-st.markdown("<h1 style='text-align:center;'>Mall Customer Segmentation Dashboard</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align:center;'>Mall Customer Segmentation System</h1>", unsafe_allow_html=True)
 st.markdown("<h4 style='text-align:center;'>Major Project - C V Raman Global University</h4>", unsafe_allow_html=True)
 st.markdown("---")
 
 # ---------------- Sidebar ----------------
-st.sidebar.title("Project Navigation")
+st.sidebar.title("Navigation")
 
 menu = st.sidebar.radio(
     "Select Section",
-    ["Home", "Data Analysis", "About"]
+    ["Home", "Analysis", "Insights", "About"]
 )
 
 st.sidebar.markdown("---")
@@ -48,79 +47,52 @@ st.sidebar.write("Aditya Kumar")
 st.sidebar.write("Archita Rout")
 st.sidebar.write("Bhavya Rani")
 
-# ---------------- Home Section ----------------
+# ---------------- Load Dataset Automatically ----------------
+try:
+    df = pd.read_csv("Mall_Customers.csv")
+except:
+    df = None
+
+# ---------------- Home ----------------
 if menu == "Home":
 
-    st.markdown("## Introduction")
+    st.markdown("## Project Overview")
 
     st.write("""
-    Customer segmentation is an important concept in data analytics and marketing. 
-    It helps businesses divide customers into groups based on similar characteristics 
-    such as income level and spending behavior. In this project, we have applied 
-    K-Means clustering, an unsupervised machine learning algorithm, 
-    to segment mall customers into meaningful groups.
+    This project performs customer segmentation using the K-Means 
+    clustering algorithm on the Mall Customers dataset. 
+    The objective is to identify meaningful customer groups 
+    based on annual income and spending behavior.
     """)
 
-    st.markdown("## What We Have Done")
+    st.markdown("### Dataset Information")
+
+    if df is not None:
+        st.write("Total Records:", df.shape[0])
+        st.write("Total Features:", df.shape[1])
+    else:
+        st.warning("Mall_Customers.csv file not found in project folder.")
+
+    st.markdown("### Implementation Steps")
 
     st.write("""
-    • Analyzed the Mall Customers dataset  
-    • Selected relevant features for clustering  
-    • Applied the Elbow Method to determine optimal cluster number  
-    • Implemented the K-Means algorithm  
-    • Visualized clusters using scatter plots  
-    • Evaluated model performance using Silhouette Score  
+    • Data preprocessing  
+    • Feature selection  
+    • Elbow method analysis  
+    • K-Means clustering  
+    • Cluster evaluation using Silhouette Score  
     """)
 
-    st.markdown("## Methodology")
+# ---------------- Analysis ----------------
+elif menu == "Analysis":
 
-    st.write("""
-    1. Data Loading and Preprocessing  
-    2. Feature Selection (Annual Income & Spending Score)  
-    3. Determination of optimal clusters using WCSS  
-    4. Model training using K-Means  
-    5. Visualization and evaluation of clustering results  
-    """)
+    if df is None:
+        st.error("Mall_Customers.csv file not found. Please keep the file in the project folder.")
+    else:
 
-    st.markdown("## Results")
-
-    st.write("""
-    The clustering algorithm successfully grouped customers into distinct segments 
-    based on income and spending patterns. The Silhouette Score validates 
-    the quality and separation of the clusters formed.
-    """)
-
-    st.markdown("## Applications")
-
-    st.write("""
-    • Targeted marketing strategies  
-    • Customer behavior analysis  
-    • Business decision support  
-    • Sales and promotional planning  
-    """)
-
-    st.markdown("## Future Scope")
-
-    st.write("""
-    • Inclusion of additional features like Age and Gender  
-    • Application of advanced clustering algorithms  
-    • Real-time dashboard deployment  
-    • Integration with business analytics systems  
-    """)
-
-# ---------------- Data Analysis Section ----------------
-elif menu == "Data Analysis":
-
-    st.subheader("Upload Mall_Customers.csv")
-    file = st.file_uploader("Upload Dataset", type=["csv"])
-
-    if file is not None:
-        df = pd.read_csv(file)
-
-        st.markdown("### Dataset Preview")
+        st.subheader("Dataset Preview")
         st.dataframe(df.head())
 
-        st.markdown("### Feature Selection")
         features = st.multiselect(
             "Select Features for Clustering",
             df.columns,
@@ -128,11 +100,12 @@ elif menu == "Data Analysis":
         )
 
         if len(features) >= 2:
+
             X = df[features]
 
             col1, col2 = st.columns(2)
 
-            # -------- Elbow Method --------
+            # Elbow Method
             with col1:
                 st.markdown("### Elbow Method")
 
@@ -144,14 +117,15 @@ elif menu == "Data Analysis":
 
                 fig1, ax1 = plt.subplots()
                 ax1.plot(range(1, 11), wcss)
-                ax1.set_xlabel("Clusters")
+                ax1.set_xlabel("Number of Clusters")
                 ax1.set_ylabel("WCSS")
                 ax1.set_title("Elbow Graph")
                 st.pyplot(fig1)
 
-            # -------- Cluster Configuration --------
+            # Cluster Configuration
             with col2:
                 st.markdown("### Cluster Configuration")
+
                 k = st.slider("Select Number of Clusters", 2, 10, 5)
 
                 kmeans = KMeans(n_clusters=k, random_state=42)
@@ -162,7 +136,7 @@ elif menu == "Data Analysis":
                 score = silhouette_score(X, labels)
                 st.metric("Silhouette Score", round(score, 2))
 
-            # -------- Cluster Visualization --------
+            # Cluster Visualization
             st.markdown("### Cluster Visualization")
 
             fig2, ax2 = plt.subplots()
@@ -178,21 +152,34 @@ elif menu == "Data Analysis":
             ax2.set_title("Customer Segments")
             st.pyplot(fig2)
 
-            # -------- Cluster Statistics --------
             st.markdown("### Cluster Statistics")
             st.dataframe(df.groupby("Cluster").mean())
 
         else:
             st.warning("Please select at least two features.")
 
-# ---------------- About Section ----------------
+# ---------------- Insights ----------------
+elif menu == "Insights":
+
+    st.subheader("Business Insights")
+
+    st.write("""
+    The clustering results help identify different types of customers 
+    such as high-income high-spending customers and conservative buyers. 
+    These insights assist businesses in targeted marketing 
+    and strategic planning.
+    """)
+
+# ---------------- About ----------------
 elif menu == "About":
+
     st.subheader("About the Project")
 
     st.write("""
     Project Title: Mall Customer Segmentation using K-Means  
     Institution: C V Raman Global University  
 
-    This project demonstrates the application of unsupervised machine learning 
-    techniques to solve real-world business problems related to customer behavior analysis.
+    This project demonstrates practical implementation of 
+    unsupervised machine learning techniques for real-world 
+    customer behavior analysis.
     """)
