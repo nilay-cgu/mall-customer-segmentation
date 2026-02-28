@@ -4,29 +4,58 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 
+# Page config
 st.set_page_config(page_title="Mall Customer Segmentation", layout="wide")
 
-st.title("Mall Customer Segmentation")
-st.write("- C V Raman Global University")
+# -------- Dark Theme Styling --------
+st.markdown("""
+<style>
+body {
+    background-color: #0E1117;
+    color: white;
+}
+.stApp {
+    background-color: #0E1117;
+}
+h1, h2, h3, h4 {
+    color: #4DA6FF;
+}
+</style>
+""", unsafe_allow_html=True)
 
-st.sidebar.title("Team Members")
+# -------- Header --------
+st.title("Mall Customer Segmentation")
+st.write("Major Project - C V Raman Global University")
+
+st.markdown("---")
+
+# -------- Sidebar --------
+st.sidebar.title("Navigation")
+
+menu = st.sidebar.radio(
+    "Go to",
+    ["Home", "Customer Analysis", "About"]
+)
+
+st.sidebar.markdown("---")
+st.sidebar.subheader("Project Team")
 st.sidebar.write("Nilay Anand")
 st.sidebar.write("Mohit Paul")
-st.sidebar.write("Ayush Raj")
 st.sidebar.write("Aditya Kumar")
 st.sidebar.write("Archita Rout")
 st.sidebar.write("Bhavya Rani")
 
-menu = st.sidebar.selectbox("Menu", ["Home", "Analysis", "About"])
-
+# -------- Home --------
 if menu == "Home":
     st.subheader("Project Overview")
     st.write(
-        "This project performs customer segmentation using K-Means clustering "
-        "on the Mall Customers dataset."
+        "This application performs customer segmentation using "
+        "K-Means clustering on the Mall Customers dataset. "
+        "It helps identify customer groups based on income and spending patterns."
     )
 
-elif menu == "Analysis":
+# -------- Analysis --------
+elif menu == "Customer Analysis":
     st.subheader("Upload Dataset")
     file = st.file_uploader("Upload Mall_Customers.csv", type=["csv"])
 
@@ -37,7 +66,7 @@ elif menu == "Analysis":
         st.dataframe(df.head())
 
         features = st.multiselect(
-            "Select Features",
+            "Select Features for Clustering",
             df.columns,
             default=["Annual Income (k$)", "Spending Score (1-100)"]
         )
@@ -45,6 +74,7 @@ elif menu == "Analysis":
         if len(features) >= 2:
             X = df[features]
 
+            # Elbow Method
             st.subheader("Elbow Method")
 
             wcss = []
@@ -57,8 +87,10 @@ elif menu == "Analysis":
             ax1.plot(range(1, 11), wcss)
             ax1.set_xlabel("Number of Clusters")
             ax1.set_ylabel("WCSS")
+            ax1.set_title("Elbow Graph")
             st.pyplot(fig1)
 
+            # Cluster Selection
             k = st.slider("Select Number of Clusters", 2, 10, 5)
 
             kmeans = KMeans(n_clusters=k, random_state=42)
@@ -66,6 +98,7 @@ elif menu == "Analysis":
 
             df["Cluster"] = labels
 
+            # Cluster Plot
             st.subheader("Cluster Visualization")
 
             fig2, ax2 = plt.subplots()
@@ -74,24 +107,29 @@ elif menu == "Analysis":
                 kmeans.cluster_centers_[:, 0],
                 kmeans.cluster_centers_[:, 1],
                 marker="X",
-                s=200
+                s=250
             )
             ax2.set_xlabel(features[0])
             ax2.set_ylabel(features[1])
+            ax2.set_title("Customer Segments")
             st.pyplot(fig2)
 
+            # Silhouette Score
             score = silhouette_score(X, labels)
             st.write("Silhouette Score:", round(score, 2))
 
+            # Cluster Stats
             st.subheader("Cluster Statistics")
             st.dataframe(df.groupby("Cluster").mean())
 
         else:
-            st.write("Please select at least two features.")
+            st.warning("Please select at least two features.")
 
+# -------- About --------
 elif menu == "About":
-    st.subheader("About Project")
+    st.subheader("About the Project")
     st.write(
         "This project applies K-Means clustering to segment customers "
-        "based on income and spending behavior."
+        "based on income and spending behavior. "
+        "It is developed as a major project for C V Raman Global University."
     )
