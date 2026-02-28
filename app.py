@@ -33,6 +33,34 @@ h1 {
     border-radius: 10px;
     text-align: center;
 }
+
+/* Profile Animation */
+.profile-icon {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 38px;
+    color: white;
+    margin: 0 auto 15px auto;
+    animation: float 2s ease-in-out infinite;
+    box-shadow: 0 0 20px #3b82f6;
+}
+
+@keyframes float {
+    0% {transform: translateY(0px);}
+    50% {transform: translateY(-8px);}
+    100% {transform: translateY(0px);}
+}
+
+.dialog-footer {
+    margin-top: 20px;
+    font-size: 13px;
+    color: #94a3b8;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -59,15 +87,33 @@ members = {
     "Bhavya Rani": "Worked on business insights and presentation."
 }
 
-# ---------------- Native Dialog Popup ----------------
+# ---------------- Dialog Popup ----------------
 def show_member(name, role):
     @st.dialog(name)
     def dialog():
-        st.write(role)
+
+        # Profile icon first letter
+        initial = name[0]
+
+        st.markdown(f"""
+        <div style="text-align:center;">
+            <div class="profile-icon">{initial}</div>
+            <h3 style="margin-bottom:5px;">{name}</h3>
+            <div style="font-size:13px; color:#94a3b8;">
+                Computer Science and Engineering : IoT and Cyber Security
+            </div>
+            <hr style="margin:15px 0;">
+            <p style="font-size:15px;">{role}</p>
+            <div class="dialog-footer">
+                Group 6 - ❤️ Thank You @CGU
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
         st.divider()
-        st.caption("Click outside the dialog or press Close to exit.")
         if st.button("Close"):
             st.rerun()
+
     dialog()
 
 for name, role in members.items():
