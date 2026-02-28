@@ -4,10 +4,10 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 
-# ---------------- Page Config ----------------
+# ---------------- Page Configuration ----------------
 st.set_page_config(page_title="Mall Customer Segmentation", layout="wide")
 
-# ---------------- Professional Website Styling ----------------
+# ---------------- Professional Styling ----------------
 st.markdown("""
 <style>
 .stApp {
@@ -21,6 +21,7 @@ section[data-testid="stSidebar"] {
 
 h1 {
     color: #60a5fa;
+    text-align: center;
 }
 
 h2, h3 {
@@ -45,11 +46,8 @@ h2, h3 {
 """, unsafe_allow_html=True)
 
 # ---------------- Header ----------------
-st.markdown("""
-<h1 style='text-align:center;'>Mall Customer Segmentation System</h1>
-<h4 style='text-align:center;'>Major Project - C V Raman Global University</h4>
-""", unsafe_allow_html=True)
-
+st.markdown("<h1>Mall Customer Segmentation System</h1>", unsafe_allow_html=True)
+st.markdown("<h4 style='text-align:center;'>Major Project - C V Raman Global University</h4>", unsafe_allow_html=True)
 st.markdown("---")
 
 # ---------------- Sidebar ----------------
@@ -75,50 +73,93 @@ try:
 except:
     df = None
 
-# ---------------- Home ----------------
+# ---------------- Home Section ----------------
 if menu == "Home":
 
-    st.markdown("## Project Overview")
-
+    st.markdown("## Introduction")
     st.markdown("""
     <div class="card">
-    Customer segmentation is used to classify customers into different groups 
-    based on purchasing behavior and income levels. 
-    In this project, we applied the K-Means clustering algorithm 
-    to identify meaningful customer segments.
+    Customer segmentation is a strategic marketing technique used to divide customers 
+    into groups based on similar characteristics and purchasing behavior. 
+    
+    In this project, we implemented the K-Means clustering algorithm to segment 
+    mall customers using Annual Income and Spending Score as primary features.
     </div>
     """, unsafe_allow_html=True)
 
-    col1, col2, col3 = st.columns(3)
-
-    if df is not None:
-        col1.markdown(f"<div class='metric-box'>Total Records<br><b>{df.shape[0]}</b></div>", unsafe_allow_html=True)
-        col2.markdown(f"<div class='metric-box'>Total Features<br><b>{df.shape[1]}</b></div>", unsafe_allow_html=True)
-        col3.markdown("<div class='metric-box'>Algorithm<br><b>K-Means</b></div>", unsafe_allow_html=True)
-
-    st.markdown("## Implementation Summary")
-
+    st.markdown("## Problem Statement")
     st.markdown("""
     <div class="card">
-    • Performed exploratory data analysis  
-    • Determined optimal clusters using Elbow Method  
-    • Applied K-Means clustering  
-    • Evaluated clustering using Silhouette Score  
-    • Visualized customer segments  
+    Businesses often face difficulty in identifying different customer categories 
+    for targeted promotions. Without segmentation, marketing efforts may not 
+    reach the appropriate audience effectively.
+    
+    This project aims to identify meaningful customer groups using 
+    unsupervised machine learning.
     </div>
     """, unsafe_allow_html=True)
 
-# ---------------- Analysis ----------------
+    st.markdown("## Methodology")
+    st.markdown("""
+    <div class="card">
+    1. Data Loading and Preprocessing  
+    2. Feature Selection (Income & Spending Score)  
+    3. Determination of optimal clusters using Elbow Method  
+    4. Implementation of K-Means Algorithm  
+    5. Cluster Visualization  
+    6. Model Evaluation using Silhouette Score  
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("## Results and Observations")
+    st.markdown("""
+    <div class="card">
+    The clustering algorithm successfully grouped customers into distinct 
+    segments representing different spending behaviors.
+    
+    High-income high-spending customers were identified as premium customers, 
+    while moderate and budget customers formed separate clusters.
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("## Applications")
+    st.markdown("""
+    <div class="card">
+    • Targeted marketing strategies  
+    • Personalized offers  
+    • Customer retention planning  
+    • Strategic business decisions  
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("## Future Scope")
+    st.markdown("""
+    <div class="card">
+    • Inclusion of additional demographic features  
+    • Use of advanced clustering techniques  
+    • Real-time dashboard integration  
+    • Enterprise-level deployment  
+    </div>
+    """, unsafe_allow_html=True)
+
+# ---------------- Analysis Section ----------------
 elif menu == "Analysis":
 
     if df is None:
         st.error("Mall_Customers.csv file not found in project folder.")
     else:
 
-        st.markdown("## Dataset Preview")
+        st.markdown("## Dataset Overview")
+
+        col1, col2, col3 = st.columns(3)
+        col1.markdown(f"<div class='metric-box'>Total Records<br><b>{df.shape[0]}</b></div>", unsafe_allow_html=True)
+        col2.markdown(f"<div class='metric-box'>Total Features<br><b>{df.shape[1]}</b></div>", unsafe_allow_html=True)
+        col3.markdown("<div class='metric-box'>Algorithm<br><b>K-Means</b></div>", unsafe_allow_html=True)
+
+        st.markdown("### Dataset Preview")
         st.dataframe(df.head())
 
-        st.markdown("## Feature Selection")
+        st.markdown("### Feature Selection")
 
         features = st.multiselect(
             "Select Features",
@@ -187,9 +228,11 @@ elif menu == "Insights":
 
     st.markdown("""
     <div class="card">
-    The clustering results help identify customer categories such as 
-    high-value customers, moderate spenders, and budget customers.
-    These insights support targeted marketing and strategic decision making.
+    The segmentation model enables identification of customer types 
+    such as premium customers, moderate spenders, and conservative buyers.
+    
+    These insights assist businesses in optimizing marketing campaigns 
+    and improving customer engagement strategies.
     </div>
     """, unsafe_allow_html=True)
 
@@ -202,8 +245,8 @@ elif menu == "About":
     <div class="card">
     Project Title: Mall Customer Segmentation using K-Means  
     Institution: C V Raman Global University  
-
-    This system demonstrates practical implementation of 
-    unsupervised machine learning techniques in customer behavior analysis.
+    
+    This project demonstrates the application of unsupervised machine learning 
+    techniques in solving real-world business problems related to customer analytics.
     </div>
     """, unsafe_allow_html=True)
