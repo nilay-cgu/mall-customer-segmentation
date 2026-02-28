@@ -7,7 +7,7 @@ from sklearn.metrics import silhouette_score
 # ---------------- Page Config ----------------
 st.set_page_config(page_title="Mall Customer Segmentation", layout="wide")
 
-# ---------------- Custom Dark Styling ----------------
+# ---------------- Dark Theme Styling ----------------
 st.markdown("""
 <style>
 .stApp {
@@ -20,14 +20,13 @@ section[data-testid="stSidebar"] {
 h1, h2, h3 {
     color: #38bdf8;
 }
-.stButton>button {
-    background-color: #2563eb;
-    color: white;
+.block-container {
+    padding-top: 2rem;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# ---------------- Header Section ----------------
+# ---------------- Header ----------------
 st.markdown("<h1 style='text-align:center;'>Mall Customer Segmentation Dashboard</h1>", unsafe_allow_html=True)
 st.markdown("<h4 style='text-align:center;'>Major Project - C V Raman Global University</h4>", unsafe_allow_html=True)
 st.markdown("---")
@@ -44,34 +43,72 @@ st.sidebar.markdown("---")
 st.sidebar.subheader("Project Team")
 st.sidebar.write("Nilay Anand")
 st.sidebar.write("Mohit Paul")
+st.sidebar.write("Ayush Raj")
 st.sidebar.write("Aditya Kumar")
 st.sidebar.write("Archita Rout")
 st.sidebar.write("Bhavya Rani")
 
-# ---------------- Home ----------------
+# ---------------- Home Section ----------------
 if menu == "Home":
-    col1, col2 = st.columns(2)
 
-    with col1:
-        st.subheader("Project Overview")
-        st.write("""
-        This dashboard performs customer segmentation using
-        K-Means clustering on the Mall Customers dataset.
-        The objective is to identify distinct customer groups
-        based on income and spending patterns.
-        """)
+    st.markdown("## Introduction")
 
-    with col2:
-        st.subheader("Key Features")
-        st.write("""
-        • Interactive dataset upload  
-        • Elbow method visualization  
-        • Dynamic cluster selection  
-        • Silhouette score evaluation  
-        • Cluster statistics summary  
-        """)
+    st.write("""
+    Customer segmentation is an important concept in data analytics and marketing. 
+    It helps businesses divide customers into groups based on similar characteristics 
+    such as income level and spending behavior. In this project, we have applied 
+    K-Means clustering, an unsupervised machine learning algorithm, 
+    to segment mall customers into meaningful groups.
+    """)
 
-# ---------------- Data Analysis ----------------
+    st.markdown("## What We Have Done")
+
+    st.write("""
+    • Analyzed the Mall Customers dataset  
+    • Selected relevant features for clustering  
+    • Applied the Elbow Method to determine optimal cluster number  
+    • Implemented the K-Means algorithm  
+    • Visualized clusters using scatter plots  
+    • Evaluated model performance using Silhouette Score  
+    """)
+
+    st.markdown("## Methodology")
+
+    st.write("""
+    1. Data Loading and Preprocessing  
+    2. Feature Selection (Annual Income & Spending Score)  
+    3. Determination of optimal clusters using WCSS  
+    4. Model training using K-Means  
+    5. Visualization and evaluation of clustering results  
+    """)
+
+    st.markdown("## Results")
+
+    st.write("""
+    The clustering algorithm successfully grouped customers into distinct segments 
+    based on income and spending patterns. The Silhouette Score validates 
+    the quality and separation of the clusters formed.
+    """)
+
+    st.markdown("## Applications")
+
+    st.write("""
+    • Targeted marketing strategies  
+    • Customer behavior analysis  
+    • Business decision support  
+    • Sales and promotional planning  
+    """)
+
+    st.markdown("## Future Scope")
+
+    st.write("""
+    • Inclusion of additional features like Age and Gender  
+    • Application of advanced clustering algorithms  
+    • Real-time dashboard deployment  
+    • Integration with business analytics systems  
+    """)
+
+# ---------------- Data Analysis Section ----------------
 elif menu == "Data Analysis":
 
     st.subheader("Upload Mall_Customers.csv")
@@ -112,7 +149,7 @@ elif menu == "Data Analysis":
                 ax1.set_title("Elbow Graph")
                 st.pyplot(fig1)
 
-            # -------- Cluster Selection --------
+            # -------- Cluster Configuration --------
             with col2:
                 st.markdown("### Cluster Configuration")
                 k = st.slider("Select Number of Clusters", 2, 10, 5)
@@ -141,20 +178,21 @@ elif menu == "Data Analysis":
             ax2.set_title("Customer Segments")
             st.pyplot(fig2)
 
-            # -------- Statistics --------
+            # -------- Cluster Statistics --------
             st.markdown("### Cluster Statistics")
             st.dataframe(df.groupby("Cluster").mean())
 
         else:
             st.warning("Please select at least two features.")
 
-# ---------------- About ----------------
+# ---------------- About Section ----------------
 elif menu == "About":
     st.subheader("About the Project")
+
     st.write("""
     Project Title: Mall Customer Segmentation using K-Means  
     Institution: C V Raman Global University  
 
-    This project applies unsupervised learning to identify 
-    distinct customer segments for better marketing strategy planning.
+    This project demonstrates the application of unsupervised machine learning 
+    techniques to solve real-world business problems related to customer behavior analysis.
     """)
