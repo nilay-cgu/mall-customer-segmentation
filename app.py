@@ -66,7 +66,7 @@ h2 {
 """, unsafe_allow_html=True)
 
 st.markdown("<h1>Mall Customer Segmentation System</h1>", unsafe_allow_html=True)
-st.markdown("<h4 style='text-align:center;'>Major Project - C V Raman Global University</h4>", unsafe_allow_html=True)
+st.markdown("<h4 style='text-align:center;'>AI Training Capstone Project - C V Raman Global University</h4>", unsafe_allow_html=True)
 st.markdown("---")
 
 # ---------------- Sidebar ----------------
