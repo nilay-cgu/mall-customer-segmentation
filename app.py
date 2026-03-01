@@ -83,7 +83,7 @@ st.sidebar.subheader("Project Team")
 st.sidebar.markdown(
     """
     <div style='font-size:12px; color:#60a5fa; margin-bottom:8px;'>
-    👆 Click on a team member to view role details
+     Click on a team member to view role 
     </div>
     """,
     unsafe_allow_html=True
