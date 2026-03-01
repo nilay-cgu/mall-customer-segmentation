@@ -202,6 +202,7 @@ if menu == "Home":
 
 # ---------------- ANALYSIS ----------------
 # ---------------- ANALYSIS ----------------
+# ---------------- ANALYSIS ----------------
 elif menu == "Analysis":
 
     if df is None:
@@ -210,7 +211,6 @@ elif menu == "Analysis":
 
         st.dataframe(df.head())
 
-        # Only numeric columns allowed
         numeric_columns = df.select_dtypes(include=['int64', 'float64']).columns.tolist()
 
         features = st.multiselect(
@@ -223,25 +223,36 @@ elif menu == "Analysis":
 
             X = df[features]
 
-            k = st.slider("Select Number of Clusters", 2, 10, 5)
+            col1, col2 = st.columns([2,1])
+
+            with col2:
+                k = st.slider("Clusters", 2, 10, 5)
 
             kmeans = KMeans(n_clusters=k, random_state=42)
             labels = kmeans.fit_predict(X)
 
             score = silhouette_score(X, labels)
-            st.markdown(f"<div class='metric-box'>Silhouette Score<br><b>{round(score,2)}</b></div>", unsafe_allow_html=True)
 
-            fig, ax = plt.subplots()
+            # Smaller centered metric
+            st.markdown(
+                f"<div style='width:250px; margin:auto;' class='metric-box'>"
+                f"Silhouette Score<br><b>{round(score,2)}</b></div>",
+                unsafe_allow_html=True
+            )
+
+            # Smaller Graph
+            fig, ax = plt.subplots(figsize=(6,4))  # 👈 size control here
             ax.scatter(X.iloc[:, 0], X.iloc[:, 1], c=labels)
             ax.scatter(
                 kmeans.cluster_centers_[:, 0],
                 kmeans.cluster_centers_[:, 1],
                 marker="X",
-                s=250
+                s=200
             )
             ax.set_xlabel(features[0])
             ax.set_ylabel(features[1])
-            st.pyplot(fig)
+
+            st.pyplot(fig, use_container_width=False)
 
         else:
             st.warning("Please select at least two numeric features.")
