@@ -80,6 +80,15 @@ menu = st.sidebar.radio(
 st.sidebar.markdown("---")
 st.sidebar.subheader("Project Team")
 
+st.sidebar.markdown(
+    """
+    <div style='font-size:12px; color:#60a5fa; margin-bottom:8px;'>
+    👆 Click on a team member to view role details
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 members = {
     "Nilay Anand": "Worked on UI design and model integration.",
     "Mohit Paul": "Handled dataset preprocessing and feature selection.",
