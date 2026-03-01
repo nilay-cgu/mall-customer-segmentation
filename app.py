@@ -201,30 +201,50 @@ if menu == "Home":
     """, unsafe_allow_html=True)
 
 # ---------------- ANALYSIS ----------------
-elif menu == "Analysis" and df is not None:
+# ---------------- ANALYSIS ----------------
+elif menu == "Analysis":
 
-    st.dataframe(df.head())
+    if df is None:
+        st.error("Mall_Customers.csv file not found.")
+    else:
 
-    features = st.multiselect(
-        "Select Features",
-        df.columns,
-        default=["Annual Income (k$)", "Spending Score (1-100)"]
-    )
+        st.dataframe(df.head())
 
-    if len(features) >= 2:
-        X = df[features]
+        # Only numeric columns allowed
+        numeric_columns = df.select_dtypes(include=['int64', 'float64']).columns.tolist()
 
-        k = st.slider("Clusters", 2, 10, 5)
-        kmeans = KMeans(n_clusters=k, random_state=42)
-        labels = kmeans.fit_predict(X)
+        features = st.multiselect(
+            "Select Features (Only Numeric Columns Allowed)",
+            numeric_columns,
+            default=["Annual Income (k$)", "Spending Score (1-100)"]
+        )
 
-        score = silhouette_score(X, labels)
-        st.markdown(f"<div class='metric-box'>Silhouette Score<br><b>{round(score,2)}</b></div>", unsafe_allow_html=True)
+        if len(features) >= 2:
 
-        fig, ax = plt.subplots()
-        ax.scatter(X.iloc[:, 0], X.iloc[:, 1], c=labels)
-        ax.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1], marker="X", s=250)
-        st.pyplot(fig)
+            X = df[features]
+
+            k = st.slider("Select Number of Clusters", 2, 10, 5)
+
+            kmeans = KMeans(n_clusters=k, random_state=42)
+            labels = kmeans.fit_predict(X)
+
+            score = silhouette_score(X, labels)
+            st.markdown(f"<div class='metric-box'>Silhouette Score<br><b>{round(score,2)}</b></div>", unsafe_allow_html=True)
+
+            fig, ax = plt.subplots()
+            ax.scatter(X.iloc[:, 0], X.iloc[:, 1], c=labels)
+            ax.scatter(
+                kmeans.cluster_centers_[:, 0],
+                kmeans.cluster_centers_[:, 1],
+                marker="X",
+                s=250
+            )
+            ax.set_xlabel(features[0])
+            ax.set_ylabel(features[1])
+            st.pyplot(fig)
+
+        else:
+            st.warning("Please select at least two numeric features.")
 
 # ---------------- INSIGHTS ----------------
 elif menu == "Insights":
