@@ -10,58 +10,119 @@ st.set_page_config(page_title="Mall Customer Segmentation", layout="wide")
 # ---------------- Styling ----------------
 st.markdown("""
 <style>
+
+/* Main App Background */
 .stApp {
-    background: linear-gradient(135deg, #0f172a, #0b1120);
+    background: linear-gradient(135deg,#0f172a,#020617);
     color: #f1f5f9;
 }
+
+/* Sidebar Styling */
 section[data-testid="stSidebar"] {
-    background-color: #111827;
+    background: linear-gradient(180deg,#020617,#0f172a);
+    border-right: 1px solid #1e293b;
 }
+
+/* Titles */
 h1 {
-    color: #60a5fa;
-    text-align: center;
+    color:#60a5fa;
+    text-align:center;
 }
+
 h2 {
-    color: #93c5fd;
+    color:#93c5fd;
 }
+
+/* Cards */
 .card {
-    background: rgba(30,41,59,0.6);
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 15px;
+    background: rgba(30,41,59,0.55);
+    padding:20px;
+    border-radius:14px;
+    margin-bottom:15px;
+    border:1px solid rgba(255,255,255,0.08);
+    transition: all 0.3s ease;
 }
+
+.card:hover{
+    transform: translateY(-3px);
+    box-shadow:0px 0px 15px rgba(59,130,246,0.3);
+}
+
+/* Metric Box */
 .metric-box {
-    background: linear-gradient(90deg,#1e40af,#2563eb);
-    padding: 15px;
-    border-radius: 10px;
-    text-align: center;
+    background: linear-gradient(90deg,#2563eb,#1d4ed8);
+    padding:15px;
+    border-radius:12px;
+    text-align:center;
+    font-size:18px;
+    box-shadow:0px 0px 10px rgba(59,130,246,0.5);
+}
+
+/* Buttons Glow */
+.stButton>button {
+    border-radius:12px;
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+    color:white;
+    border:none;
+    padding:8px 16px;
+    transition: all 0.3s ease;
+    box-shadow:0px 0px 8px rgba(59,130,246,0.6);
+}
+
+.stButton>button:hover{
+    transform: scale(1.05);
+    box-shadow:0px 0px 18px rgba(96,165,250,0.9);
+}
+
+/* Sidebar Buttons (Team Names) */
+section[data-testid="stSidebar"] .stButton>button{
+    width:100%;
+    background: rgba(30,41,59,0.7);
+    border:1px solid rgba(255,255,255,0.05);
+    box-shadow:none;
+}
+
+section[data-testid="stSidebar"] .stButton>button:hover{
+    background:#2563eb;
+    box-shadow:0px 0px 10px rgba(96,165,250,0.8);
 }
 
 /* Profile Animation */
 .profile-icon {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 38px;
-    color: white;
-    margin: 0 auto 15px auto;
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#3b82f6,#2563eb);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:38px;
+    color:white;
+    margin:0 auto 15px auto;
     animation: float 2s ease-in-out infinite;
-    box-shadow: 0 0 20px #3b82f6;
+    box-shadow:0px 0px 20px #3b82f6;
 }
-@keyframes float {
-    0% {transform: translateY(0px);}
-    50% {transform: translateY(-8px);}
-    100% {transform: translateY(0px);}
+
+@keyframes float{
+    0%{transform:translateY(0px);}
+    50%{transform:translateY(-8px);}
+    100%{transform:translateY(0px);}
 }
-.dialog-footer {
-    margin-top: 20px;
-    font-size: 13px;
-    color: #94a3b8;
+
+/* Small Hint Text */
+.sidebar-hint{
+    font-size:12px;
+    color:#60a5fa;
+    margin-bottom:10px;
 }
+
+/* Footer */
+.dialog-footer{
+    margin-top:20px;
+    font-size:13px;
+    color:#94a3b8;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
