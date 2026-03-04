@@ -376,7 +376,7 @@ elif menu == "📊 Analysis":
         st.error("Mall_Customers.csv not found")
     else:
 
-      st.dataframe(df)
+     st.dataframe(df.head())
 
         numeric_columns = df.select_dtypes(include=['int64','float64']).columns
 
