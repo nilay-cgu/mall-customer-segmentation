@@ -11,13 +11,11 @@ st.set_page_config(page_title="Mall Customer Segmentation", layout="wide")
 st.markdown("""
 <style>
 
-/* App background */
 .stApp{
 background:linear-gradient(135deg,#020617,#0f172a);
 color:#e2e8f0;
 }
 
-/* glowing border */
 .block-container{
 border:1px solid rgba(96,165,250,0.25);
 border-radius:16px;
@@ -25,13 +23,11 @@ padding:20px;
 box-shadow:0px 0px 15px rgba(59,130,246,0.3);
 }
 
-/* sidebar */
 section[data-testid="stSidebar"]{
 background:linear-gradient(180deg,#020617,#0f172a);
 border-right:1px solid #1e293b;
 }
 
-/* titles */
 h1{
 color:#60a5fa;
 text-align:center;
@@ -42,7 +38,6 @@ h2{
 color:#93c5fd;
 }
 
-/* cards */
 .card{
 background:rgba(30,41,59,0.55);
 padding:22px;
@@ -57,7 +52,6 @@ transform:translateY(-4px);
 box-shadow:0px 0px 20px rgba(96,165,250,0.4);
 }
 
-/* metric boxes */
 .metric-box{
 background:linear-gradient(135deg,#2563eb,#1d4ed8);
 padding:16px;
@@ -66,7 +60,6 @@ text-align:center;
 box-shadow:0px 0px 20px rgba(59,130,246,0.6);
 }
 
-/* neon buttons */
 .stButton>button{
 border-radius:14px;
 padding:10px 18px;
@@ -85,29 +78,6 @@ box-shadow:
 0px 0px 30px rgba(103,232,249,0.7);
 }
 
-/* NAVIGATION MENU STYLE */
-
-div[role="radiogroup"] label{
-background:rgba(30,41,59,0.65);
-padding:12px 14px;
-border-radius:12px;
-margin-bottom:10px;
-border-left:4px solid transparent;
-transition:all 0.3s ease;
-cursor:pointer;
-font-size:16px;
-}
-
-div[role="radiogroup"] label:hover{
-background:linear-gradient(135deg,#2563eb,#3b82f6);
-box-shadow:
-0px 0px 8px rgba(96,165,250,0.9),
-0px 0px 18px rgba(59,130,246,0.7);
-transform:translateX(6px);
-border-left:4px solid #38bdf8;
-}
-
-/* profile icon */
 .profile-icon{
 width:90px;
 height:90px;
@@ -127,11 +97,6 @@ box-shadow:0px 0px 20px #3b82f6;
 0%{transform:translateY(0)}
 50%{transform:translateY(-8px)}
 100%{transform:translateY(0)}
-}
-
-@keyframes fadeIn{
-0%{opacity:0;transform:translateY(-20px)}
-100%{opacity:1;transform:translateY(0)}
 }
 
 .dialog-footer{
@@ -163,7 +128,6 @@ st.sidebar.markdown(
 text-align:center;
 color:#60a5fa;
 text-shadow:0px 0px 12px #3b82f6;
-margin-bottom:15px;
 ">
 Navigation
 </h2>
@@ -176,32 +140,11 @@ menu = st.sidebar.radio(
     ["🏠 Home", "📊 Analysis", "💡 Insights", "ℹ️ About"]
 )
 
-st.sidebar.markdown(
-"""
-<div style="
-height:2px;
-background:linear-gradient(90deg,#2563eb,#06b6d4,#2563eb);
-margin:20px 0;
-box-shadow:0px 0px 10px #38bdf8;
-"></div>
-""",
-unsafe_allow_html=True
-)
+st.sidebar.markdown("---")
 
 st.sidebar.markdown(
 """
-<h3 style="color:#93c5fd;text-align:center;">
-👥 Project Team
-</h3>
-""",
-unsafe_allow_html=True
-)
-
-st.sidebar.markdown(
-"""
-<div style='font-size:12px;color:#60a5fa;margin-bottom:8px;text-align:center;'>
-Click on a team member to view role
-</div>
+<h3 style="color:#93c5fd;text-align:center;">👥 Project Team</h3>
 """,
 unsafe_allow_html=True
 )
@@ -246,3 +189,80 @@ try:
     df = pd.read_csv("Mall_Customers.csv")
 except:
     df = None
+
+# ---------------- HOME ----------------
+if menu == "🏠 Home":
+
+    st.markdown("## Introduction")
+
+    st.markdown("""
+<div class="card">
+Customer segmentation is used by businesses to understand customer behavior and group customers with similar spending patterns.
+</div>
+""", unsafe_allow_html=True)
+
+# ---------------- ANALYSIS ----------------
+elif menu == "📊 Analysis":
+
+    if df is None:
+        st.error("Mall_Customers.csv not found")
+    else:
+
+        st.dataframe(df.head())
+
+        numeric_columns = df.select_dtypes(include=['int64','float64']).columns
+
+        features = st.multiselect(
+            "Select Features",
+            numeric_columns,
+            default=["Annual Income (k$)", "Spending Score (1-100)"]
+        )
+
+        if len(features) >= 2:
+
+            X = df[features]
+
+            k = st.slider("Clusters",2,10,5)
+
+            kmeans = KMeans(n_clusters=k, random_state=42)
+            labels = kmeans.fit_predict(X)
+
+            score = silhouette_score(X, labels)
+
+            st.markdown(
+                f"<div class='metric-box' style='width:250px;margin:auto;'>Silhouette Score<br><b>{round(score,2)}</b></div>",
+                unsafe_allow_html=True
+            )
+
+            fig, ax = plt.subplots(figsize=(6,4))
+            ax.scatter(X.iloc[:,0], X.iloc[:,1], c=labels)
+            ax.scatter(kmeans.cluster_centers_[:,0], kmeans.cluster_centers_[:,1], marker="X", s=200)
+            st.pyplot(fig)
+
+# ---------------- INSIGHTS ----------------
+elif menu == "💡 Insights":
+
+    st.markdown("""
+<div class="card">
+Customer segmentation helps businesses create targeted marketing strategies and identify premium customers.
+</div>
+""", unsafe_allow_html=True)
+
+# ---------------- ABOUT ----------------
+elif menu == "ℹ️ About":
+
+    st.markdown("""
+<div class="card">
+Mall Customer Segmentation using K-Means clustering developed as part of an AI Training Capstone Project at C V Raman Global University.
+</div>
+""", unsafe_allow_html=True)
+
+# ---------------- Footer ----------------
+st.markdown("""
+<hr>
+<div style="text-align:center;color:#94a3b8;font-size:14px;">
+Mall Customer Segmentation System <br>
+AI Training Capstone Project <br>
+Group 6 – C V Raman Global University
+</div>
+""", unsafe_allow_html=True)
