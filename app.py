@@ -408,22 +408,79 @@ elif menu == "📊 Analysis":
             st.pyplot(fig)
 
 # ---------------- INSIGHTS ----------------
+# ---------------- INSIGHTS ----------------
 elif menu == "💡 Insights":
 
+    st.markdown("## Customer Insights")
+
     st.markdown("""
-<div class="card">
-Customer segmentation helps businesses create targeted marketing strategies and identify premium customers.
-</div>
-""", unsafe_allow_html=True)
+    <div class="card">
+    Customer segmentation helps businesses understand the purchasing 
+    behavior of different types of customers. By analyzing income 
+    and spending patterns, businesses can identify valuable customers 
+    and design better marketing strategies.
+    </div>
+    """, unsafe_allow_html=True)
+
+    col1, col2 = st.columns(2)
+
+    col1.markdown("""
+    <div class="card">
+    <h4>💎 Premium Customers</h4>
+
+    Customers with high income and high spending score 
+    are considered premium customers. Businesses can 
+    target them with premium products, loyalty programs 
+    and exclusive offers.
+    </div>
+    """, unsafe_allow_html=True)
+
+    col2.markdown("""
+    <div class="card">
+    <h4>🎯 Moderate Customers</h4>
+
+    Customers with moderate income and spending behavior 
+    respond well to promotional campaigns and discounts. 
+    Targeted offers can increase their engagement and 
+    improve sales performance.
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="card">
+    Businesses can use these insights to improve customer 
+    satisfaction, optimize marketing strategies and 
+    increase overall profitability.
+    </div>
+    """, unsafe_allow_html=True)
+
 
 # ---------------- ABOUT ----------------
 elif menu == "ℹ️ About":
 
+    st.markdown("## About This Project")
+
     st.markdown("""
-<div class="card">
-Mall Customer Segmentation using K-Means clustering developed as part of an AI Training Capstone Project at C V Raman Global University.
-</div>
-""", unsafe_allow_html=True)
+    <div class="card">
+    <b>Project Title:</b> Mall Customer Segmentation using K-Means <br><br>
+
+    This project demonstrates the use of machine learning 
+    techniques to analyze customer behavior in retail environments.
+
+    By applying the K-Means clustering algorithm, customers 
+    are grouped based on their income and spending score, 
+    allowing businesses to understand purchasing patterns 
+    and develop targeted marketing strategies.
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="card">
+    <b>Institution:</b> C V Raman Global University <br>
+    <b>Branch:</b> Computer Science and Engineering – IoT & Cyber Security <br>
+    <b>Group:</b> Group 6
+    </div>
+    """, unsafe_allow_html=True)
 
 # ---------------- Footer ----------------
 st.markdown("""
