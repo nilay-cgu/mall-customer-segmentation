@@ -11,84 +11,106 @@ st.set_page_config(page_title="Mall Customer Segmentation", layout="wide")
 st.markdown("""
 <style>
 
-/* Main App Background */
+/* Main background */
 .stApp {
-    background: linear-gradient(135deg,#0f172a,#020617);
-    color: #f1f5f9;
+    background: linear-gradient(135deg,#020617,#0f172a);
+    color: #e2e8f0;
 }
 
-/* Sidebar Styling */
-section[data-testid="stSidebar"] {
+/* Sidebar */
+section[data-testid="stSidebar"]{
     background: linear-gradient(180deg,#020617,#0f172a);
-    border-right: 1px solid #1e293b;
+    border-right:1px solid #1e293b;
 }
 
-/* Titles */
-h1 {
+/* Title */
+h1{
     color:#60a5fa;
     text-align:center;
+    text-shadow:0px 0px 15px rgba(96,165,250,0.8);
 }
 
-h2 {
+/* Section titles */
+h2{
     color:#93c5fd;
 }
 
 /* Cards */
-.card {
+.card{
     background: rgba(30,41,59,0.55);
-    padding:20px;
-    border-radius:14px;
-    margin-bottom:15px;
-    border:1px solid rgba(255,255,255,0.08);
+    border-radius:16px;
+    padding:22px;
+    margin-bottom:16px;
+    border:1px solid rgba(255,255,255,0.05);
     transition: all 0.3s ease;
 }
 
+/* Card hover */
 .card:hover{
-    transform: translateY(-3px);
-    box-shadow:0px 0px 15px rgba(59,130,246,0.3);
+    transform: translateY(-4px);
+    box-shadow:0px 0px 25px rgba(96,165,250,0.4);
 }
 
-/* Metric Box */
-.metric-box {
-    background: linear-gradient(90deg,#2563eb,#1d4ed8);
-    padding:15px;
-    border-radius:12px;
+/* Metric boxes */
+.metric-box{
+    background: linear-gradient(135deg,#2563eb,#1d4ed8);
+    padding:16px;
+    border-radius:14px;
     text-align:center;
-    font-size:18px;
-    box-shadow:0px 0px 10px rgba(59,130,246,0.5);
+    box-shadow:0px 0px 20px rgba(59,130,246,0.6);
 }
 
-/* Buttons Glow */
-.stButton>button {
-    border-radius:12px;
-    background:linear-gradient(135deg,#2563eb,#3b82f6);
-    color:white;
+/* Main buttons */
+.stButton>button{
+    border-radius:14px;
+    padding:10px 18px;
     border:none;
-    padding:8px 16px;
+    color:white;
+    background: linear-gradient(135deg,#2563eb,#3b82f6);
     transition: all 0.3s ease;
-    box-shadow:0px 0px 8px rgba(59,130,246,0.6);
+    box-shadow:0px 0px 10px rgba(96,165,250,0.6);
 }
 
+/* Button hover glow */
 .stButton>button:hover{
     transform: scale(1.05);
-    box-shadow:0px 0px 18px rgba(96,165,250,0.9);
+    box-shadow:
+        0px 0px 8px rgba(59,130,246,0.9),
+        0px 0px 20px rgba(96,165,250,0.8),
+        0px 0px 30px rgba(147,197,253,0.7);
 }
 
-/* Sidebar Buttons (Team Names) */
+/* Sidebar team buttons */
 section[data-testid="stSidebar"] .stButton>button{
-    width:100%;
     background: rgba(30,41,59,0.7);
     border:1px solid rgba(255,255,255,0.05);
-    box-shadow:none;
 }
 
+/* Sidebar hover neon */
 section[data-testid="stSidebar"] .stButton>button:hover{
     background:#2563eb;
+    box-shadow:
+        0px 0px 10px rgba(59,130,246,0.8),
+        0px 0px 20px rgba(96,165,250,0.9);
+}
+
+/* Radio select section styling */
+div[role="radiogroup"] > label{
+    background: rgba(30,41,59,0.6);
+    padding:8px 12px;
+    border-radius:10px;
+    margin-bottom:6px;
+    transition:0.2s;
+}
+
+/* Radio hover */
+div[role="radiogroup"] > label:hover{
+    background:#1e40af;
     box-shadow:0px 0px 10px rgba(96,165,250,0.8);
 }
 
-/* Profile Animation */
-.profile-icon {
+/* Profile icon */
+.profile-icon{
     width:90px;
     height:90px;
     border-radius:50%;
@@ -103,20 +125,14 @@ section[data-testid="stSidebar"] .stButton>button:hover{
     box-shadow:0px 0px 20px #3b82f6;
 }
 
+/* Floating animation */
 @keyframes float{
     0%{transform:translateY(0px);}
     50%{transform:translateY(-8px);}
     100%{transform:translateY(0px);}
 }
 
-/* Small Hint Text */
-.sidebar-hint{
-    font-size:12px;
-    color:#60a5fa;
-    margin-bottom:10px;
-}
-
-/* Footer */
+/* Footer text */
 .dialog-footer{
     margin-top:20px;
     font-size:13px;
