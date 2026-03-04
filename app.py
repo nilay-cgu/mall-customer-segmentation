@@ -344,78 +344,78 @@ if menu == "Home":
         """,
         unsafe_allow_html=True
     )
+
+    # ---------------- Improvement Section ----------------
+
     st.markdown("## 🚀 How This System Can Be Improved")
 
-col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2)
 
-col1.markdown(
-"""
-<div class="card">
-<h4>📊 More Features</h4>
+    col1.markdown(
+    """
+    <div class="card">
+    <h4>📊 More Features</h4>
 
-The current model uses only Annual Income and Spending Score 
-for clustering. The system can be improved by including more 
-features such as Age, Gender and purchase history.
+    The current model uses only Annual Income and Spending Score 
+    for clustering. The system can be improved by including more 
+    features such as Age, Gender and purchase history.
 
-Using additional features will help the model create more 
-accurate customer groups and better business insights.
-</div>
-""",
-unsafe_allow_html=True
-)
+    Using additional features will help the model create more 
+    accurate customer groups and better business insights.
+    </div>
+    """,
+    unsafe_allow_html=True
+    )
 
-col2.markdown(
-"""
-<div class="card">
-<h4>🤖 Advanced Algorithms</h4>
+    col2.markdown(
+    """
+    <div class="card">
+    <h4>🤖 Advanced Algorithms</h4>
 
-Currently the system uses the K-Means clustering algorithm. 
-The model can be further improved by experimenting with 
-advanced clustering techniques such as:
+    Currently the system uses the K-Means clustering algorithm. 
+    The model can be further improved by experimenting with 
+    advanced clustering techniques such as:
 
-• Hierarchical Clustering  
-• DBSCAN  
-• Gaussian Mixture Models
+    • Hierarchical Clustering  
+    • DBSCAN  
+    • Gaussian Mixture Models
+    </div>
+    """,
+    unsafe_allow_html=True
+    )
 
-These algorithms may identify more complex patterns 
-within the dataset.
-</div>
-""",
-unsafe_allow_html=True
-)
+    col3, col4 = st.columns(2)
 
-col3, col4 = st.columns(2)
+    col3.markdown(
+    """
+    <div class="card">
+    <h4>📈 Real-Time Data Integration</h4>
 
-col3.markdown(
-"""
-<div class="card">
-<h4>📈 Real-Time Data Integration</h4>
+    The system currently works with a static dataset. 
+    Future versions could integrate real-time customer data 
+    from retail systems or online platforms.
 
-The system currently works with a static dataset. 
-Future versions could integrate real-time customer data 
-from retail systems or online platforms.
+    This would allow businesses to perform live segmentation 
+    and update marketing strategies dynamically.
+    </div>
+    """,
+    unsafe_allow_html=True
+    )
 
-This would allow businesses to perform live customer 
-segmentation and adapt marketing strategies instantly.
-</div>
-""",
-unsafe_allow_html=True
-)
+    col4.markdown(
+    """
+    <div class="card">
+    <h4>🎯 Better Visualization</h4>
 
-col4.markdown(
-"""
-<div class="card">
-<h4>🎯 Better Visualization</h4>
+    Data visualization can be improved by adding interactive 
+    charts and dashboards using tools like Plotly.
 
-Data visualization can be improved by adding interactive 
-charts and dashboards using tools like Plotly or Power BI.
-
-Interactive visualizations make it easier for managers 
-to understand customer patterns and make strategic decisions.
-</div>
-""",
-unsafe_allow_html=True
-)
+    Interactive dashboards help business managers 
+    better understand customer patterns.
+    </div>
+    """,
+    unsafe_allow_html=True
+    )
 
 # ---------------- ANALYSIS ----------------
 # ---------------- ANALYSIS ----------------
